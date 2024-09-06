@@ -9,7 +9,7 @@ permissions:
   packages: write
 
 env:
-  BASE_IMAGE: inventas/laravel-base:latest
+  BASE_IMAGE: ghcr.io/inventas/laravel-base:latest
 
 jobs:
   build-backend-images:
