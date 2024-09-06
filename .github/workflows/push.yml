@@ -27,8 +27,8 @@ jobs:
         uses: serversideup/github-action-docker-build@v5
         with:
           tags: ${{ env.BASE_IMAGE }}
-          dockerfile: "./Dockerfile"
+          dockerfile: "./D ockerfile"
           registry: "ghcr.io"
           registry-username: inventas
           registry-token: "${{ secrets.GITHUB_TOKEN }}"
-          platforms: "linux/amd64,linux/arm64"
+          platforms: "linux/amd64"
