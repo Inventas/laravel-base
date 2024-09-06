@@ -31,4 +31,4 @@ jobs:
           registry: "ghcr.io"
           registry-username: inventas
           registry-token: "${{ secrets.REGISTRY_TOKEN }}"
-          platforms: "linux/amd64"
+          platforms: "linux/amd64,linux/arm64"
