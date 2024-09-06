@@ -4,6 +4,10 @@ on:
   schedule:
     - cron: '0 0 * * 1'
 
+permissions:
+  contents: read
+  packages: write
+
 env:
   BASE_IMAGE: ghcr.io/inventas/laravel-base:latest
 
@@ -18,7 +22,7 @@ jobs:
         with:
           registry: ghcr.io
           username: inventas
-          password: ${{secrets.GITHUB_TOKEN}}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: "Build"
         uses: serversideup/github-action-docker-build@v5
         with:
