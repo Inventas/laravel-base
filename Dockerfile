@@ -1,4 +1,5 @@
 FROM serversideup/php:8.3-fpm-nginx-alpine AS base
+LABEL org.opencontainers.image.source="https://github.com/inventas/laravel-base"
 
 USER root
 
