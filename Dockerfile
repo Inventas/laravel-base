@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.source="https://github.com/inventas/laravel-base"
 USER root
 
 RUN apk update && apk add mariadb-client
-RUN install-php-extensions bcmath gd exif intl uv opentelemetry grpc zlib ffi protobuf
+RUN install-php-extensions bcmath gd exif intl uv opentelemetry zlib ffi protobuf
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
     ./aws/install
