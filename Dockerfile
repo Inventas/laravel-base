@@ -1,6 +1,7 @@
 FROM serversideup/php:8.4.4-fpm-nginx-alpine AS base
 LABEL org.opencontainers.image.source="https://github.com/inventas/laravel-base"
 
+
 USER root
 
 RUN apk add --no-cache --virtual .build-deps unzip curl \
