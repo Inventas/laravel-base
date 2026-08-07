@@ -1,4 +1,4 @@
-FROM serversideup/php:8.5-fpm-nginx AS base
+FROM serversideup/php:8.5.9-fpm-nginx-alpine@sha256:638a31d2201022b61605fd423b86ccaed20c12732f6aba4870f4c3ff1d8e57da AS base
 LABEL org.opencontainers.image.source="https://github.com/inventas/laravel-base"
 
 USER root
@@ -21,15 +21,12 @@ RUN apk add --no-cache \
         zlib
 
 # PHP extensions and utilities
-RUN apk add --no-cache --virtual .build-deps unzip curl \
- && apk add --no-cache mariadb-client nodejs npm \
+RUN apk add --no-cache aws-cli mariadb-client nodejs npm \
  && install-php-extensions bcmath gd exif intl uv opentelemetry zlib ffi protobuf imagick vips sockets \
- && curl -sS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
- && unzip -q awscliv2.zip \
- && ./aws/install \
- && rm -rf aws awscliv2.zip \
- && apk del .build-deps \
  && rm -rf /var/cache/apk/* /tmp/* /usr/share/man /usr/local/share/.cache
+
+RUN php -r 'exit(PHP_VERSION === "8.5.9" ? 0 : 1);' \
+ && aws --version
 
 RUN docker-php-serversideup-dep-install-alpine git
 
