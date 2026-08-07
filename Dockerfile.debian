@@ -1,0 +1,30 @@
+FROM node:24-trixie-slim@sha256:0711b541c1c33a8a530ac4f0d391baa9a15b3d804695b1b24a47daa5fb60e74d AS node
+
+FROM serversideup/php:8.5.9-fpm-nginx@sha256:8528fbccb36894a9b6c32b9443260511c685ee0cb0bd3188d934077dfb0564db AS base
+LABEL org.opencontainers.image.source="https://github.com/inventas/laravel-base"
+
+USER root
+
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+
+RUN ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+ && ln -s ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+        awscli \
+        git \
+        mariadb-client \
+ && install-php-extensions bcmath gd exif intl uv opentelemetry zlib ffi protobuf imagick vips sockets \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /usr/share/man /usr/local/share/.cache
+
+RUN php -r 'exit(PHP_VERSION === "8.5.9" ? 0 : 1);' \
+ && aws --version \
+ && node --version \
+ && npm --version
+
+ENV NPM_CONFIG_CACHE=/var/www/.npm
+RUN mkdir -p /var/www/.npm && chown -R www-data:www-data /var/www/.npm
+
+USER www-data

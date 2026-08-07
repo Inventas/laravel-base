@@ -8,26 +8,32 @@ permissions:
   contents: write
   packages: write
 
-env:
-  BASE_IMAGE: ghcr.io/inventas/laravel-base:latest
-
 jobs:
   build-backend-images:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - variant: alpine
+            dockerfile: ./Dockerfile
+            tags: |
+              ghcr.io/inventas/laravel-base:latest
+              ghcr.io/inventas/laravel-base:alpine
+              ghcr.io/inventas/laravel-base:8.5.9-alpine
+          - variant: debian
+            dockerfile: ./Dockerfile.debian
+            tags: |
+              ghcr.io/inventas/laravel-base:debian
+              ghcr.io/inventas/laravel-base:8.5.9-debian
     steps:
       - name: 'Checkout GitHub Repository'
         uses: actions/checkout@v4
-      - name: 'Login to GitHub Container Registry'
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: inventas
-          password: ${{ secrets.REGISTRY_TOKEN }}
-      - name: "Build"
+      - name: "Build ${{ matrix.variant }} image"
         uses: serversideup/github-action-docker-build@v5
         with:
-          tags: ${{ env.BASE_IMAGE }}
-          dockerfile: "./Dockerfile"
+          tags: ${{ matrix.tags }}
+          dockerfile: ${{ matrix.dockerfile }}
           registry: "ghcr.io"
           registry-username: inventas
           registry-token: "${{ secrets.REGISTRY_TOKEN }}"

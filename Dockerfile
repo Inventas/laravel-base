@@ -26,7 +26,9 @@ RUN apk add --no-cache aws-cli mariadb-client nodejs npm \
  && rm -rf /var/cache/apk/* /tmp/* /usr/share/man /usr/local/share/.cache
 
 RUN php -r 'exit(PHP_VERSION === "8.5.9" ? 0 : 1);' \
- && aws --version
+ && aws --version \
+ && node --version \
+ && npm --version
 
 RUN docker-php-serversideup-dep-install-alpine git
 
