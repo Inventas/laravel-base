@@ -12,13 +12,13 @@ ghcr.io/inventas/laravel-base:latest
 
 | Operating system | Moving tag | PHP patch tag |
 | --- | --- | --- |
-| Alpine Linux | `alpine`, `latest` | `8.5.9-alpine` |
-| Debian | `debian` | `8.5.9-debian` |
+| Alpine Linux | `alpine`, `latest` | `8.5.11-alpine` |
+| Debian | `debian` | `8.5.11-debian` |
 
 ## Runtime
 
-- PHP 8.5.9
-- Node.js 24
+- PHP 8.5.11
+- Node.js 24.22.0
 - Server Side Up `fpm-nginx` on Alpine Linux or Debian
 - AMD64 and ARM64 support
 - Composer, Node.js, npm, MariaDB client, AWS CLI, libvips, and the required PHP extensions
