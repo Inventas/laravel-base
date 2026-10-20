@@ -18,7 +18,7 @@ ghcr.io/inventas/laravel-base:latest
 ## Runtime
 
 - PHP 8.5.11
-- Node.js 24
+- Node.js 24.22.0
 - Server Side Up `fpm-nginx` on Alpine Linux or Debian
 - AMD64 and ARM64 support
 - Composer, Node.js, npm, MariaDB client, AWS CLI, libvips, and the required PHP extensions
