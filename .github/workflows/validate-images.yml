@@ -1,0 +1,63 @@
+name: Validate Runtime Images
+
+on:
+  pull_request:
+    paths:
+      - Dockerfile
+      - Dockerfile.debian
+      - .github/workflows/validate-images.yml
+
+permissions:
+  contents: read
+
+jobs:
+  runtime:
+    name: ${{ matrix.variant }} / ${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [alpine, debian]
+        include:
+          - variant: alpine
+            dockerfile: Dockerfile
+          - variant: debian
+            dockerfile: Dockerfile.debian
+        arch: [amd64, arm64]
+    runs-on: ${{ matrix.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - name: Build without publishing
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          platforms: linux/${{ matrix.arch }}
+          load: true
+          push: false
+          tags: laravel-base-check:local
+      - name: Check extensions and PNG generation
+        run: |
+          docker run --rm --entrypoint php laravel-base-check:local -r '
+            foreach (["bcmath", "gd", "exif", "intl", "uv", "opentelemetry", "ffi", "protobuf", "imagick", "vips", "sockets", "pdo_mysql", "redis"] as $module) {
+                if (!extension_loaded($module)) { throw new RuntimeException($module); }
+            }
+            $image = new Imagick();
+            $image->newImage(16, 16, new ImagickPixel("red"));
+            $image->setImageFormat("png");
+            if (strlen($image->getImageBlob()) < 50) { exit(1); }
+            $gd = imagecreatetruecolor(16, 16);
+            ob_start();
+            imagepng($gd);
+            if (strlen(ob_get_clean()) < 50) { exit(1); }
+            echo "PHP ", PHP_VERSION, ": extensions and PNG generation passed\n";
+          '
+      - name: Check runtime utilities
+        run: |
+          docker run --rm --entrypoint sh laravel-base-check:local -ec '
+            composer --version
+            aws --version
+            node --version
+            npm --version
+          '
