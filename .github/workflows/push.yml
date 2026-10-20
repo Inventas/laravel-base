@@ -20,12 +20,12 @@ jobs:
             tags: |
               ghcr.io/inventas/laravel-base:latest
               ghcr.io/inventas/laravel-base:alpine
-              ghcr.io/inventas/laravel-base:8.5.9-alpine
+              ghcr.io/inventas/laravel-base:8.5.11-alpine
           - variant: debian
             dockerfile: ./Dockerfile.debian
             tags: |
               ghcr.io/inventas/laravel-base:debian
-              ghcr.io/inventas/laravel-base:8.5.9-debian
+              ghcr.io/inventas/laravel-base:8.5.11-debian
     steps:
       - name: 'Checkout GitHub Repository'
         uses: actions/checkout@v4
