@@ -35,3 +35,29 @@ docker buildx build --platform linux/arm64 --output=type=cacheonly -f Dockerfile
 docker buildx build --platform linux/amd64 --output=type=cacheonly -f Dockerfile.debian .
 docker buildx build --platform linux/arm64 --output=type=cacheonly -f Dockerfile.debian .
 ```
+
+## Publish
+
+The **Publish Runtime Images** workflow builds and publishes both variants for
+AMD64 and ARM64 on pushes to `main` or `develop`, each Monday at 00:00 UTC, or
+when started manually. The PR validation workflow does not publish images.
+
+GHCR login uses the workflow's `GITHUB_TOKEN` with `contents: read` and
+`packages: write`. No `REGISTRY_TOKEN` secret is required. In the
+[`laravel-base` package settings](https://github.com/orgs/Inventas/packages/container/laravel-base/settings),
+ensure that `Inventas/laravel-base` has write access under **Manage Actions
+access**. A repository link alone does not confirm this permission.
+
+To publish the current `main` commit after a missed push event, use
+**Actions → Publish Runtime Images → Run workflow** and select `main`, or run:
+
+```shell
+gh workflow run push.yml --repo Inventas/laravel-base --ref main
+gh run list --repo Inventas/laravel-base --workflow push.yml --limit 5
+```
+
+The manual trigger is available after this workflow is merged into the default
+branch. Check for an existing publish run before starting another one. Rerunning
+an old run uses its original commit; it does not publish the current `main`
+commit. After both publish jobs pass, resolve the new image digests before
+updating consuming applications.

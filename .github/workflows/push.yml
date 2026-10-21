@@ -1,11 +1,14 @@
+name: Publish Runtime Images
+
 on:
   push:
     branches: [ "main", "develop" ]
   schedule:
     - cron: '0 0 * * 1'
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   packages: write
 
 jobs:
@@ -35,6 +38,6 @@ jobs:
           tags: ${{ matrix.tags }}
           dockerfile: ${{ matrix.dockerfile }}
           registry: "ghcr.io"
-          registry-username: inventas
-          registry-token: "${{ secrets.REGISTRY_TOKEN }}"
+          registry-username: ${{ github.actor }}
+          registry-token: "${{ secrets.GITHUB_TOKEN }}"
           platforms: "linux/amd64,linux/arm64"
