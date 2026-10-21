@@ -1,6 +1,6 @@
 FROM node:24.22.0-trixie-slim@sha256:7f486cabe892bff8fef04c0f7da8dba84a560be3e4e2740b7a86afc57ebec315 AS node
 
-FROM serversideup/php:8.5.11-fpm-nginx@sha256:4493f4f3c8e69b292241f63f24a85745e9d845f901828d1a75785910ca43e657 AS base
+FROM serversideup/php:8.5.12-fpm-nginx-v5.0.2@sha256:0b3d79815a1c8f06bb923a4cfdaf515ff9b466271c41428d61f08b29e6c4ac5a AS base
 LABEL org.opencontainers.image.source="https://github.com/inventas/laravel-base"
 
 USER root
@@ -19,7 +19,7 @@ RUN apt-get update \
  && install-php-extensions bcmath gd exif intl uv opentelemetry zlib ffi protobuf imagick vips sockets \
  && rm -rf /var/lib/apt/lists/* /tmp/* /usr/share/man /usr/local/share/.cache
 
-RUN php -r 'exit(PHP_VERSION === "8.5.11" ? 0 : 1);' \
+RUN php -r 'exit(PHP_VERSION === "8.5.12" ? 0 : 1);' \
  && aws --version \
  && node --version \
  && npm --version
