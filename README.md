@@ -12,12 +12,16 @@ ghcr.io/inventas/laravel-base:latest
 
 | Operating system | Moving tag | PHP patch tag |
 | --- | --- | --- |
-| Alpine Linux | `alpine`, `latest` | `8.5.11-alpine` |
-| Debian | `debian` | `8.5.11-debian` |
+| Alpine Linux | `alpine`, `latest` | `8.5.12-alpine` |
+| Debian | `debian` | `8.5.12-debian` |
+
+## Security update
+
+The PHP 8.5.12 images use serversideup v5.0.2 and contain the fixes for CVE-2026-109618 and CVE-2026-109619. Both variants retain their required extensions and utilities. Publish both architecture images before rebuilding applications that consume the shared runtime.
 
 ## Runtime
 
-- PHP 8.5.11
+- PHP 8.5.12
 - Node.js 24.22.0
 - Server Side Up `fpm-nginx` on Alpine Linux or Debian
 - AMD64 and ARM64 support
