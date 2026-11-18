@@ -56,6 +56,7 @@ jobs:
       - name: Check runtime utilities
         run: |
           docker run --rm --entrypoint sh laravel-base-check:local -ec '
+            nginx -v 2>&1 | grep -Fx "nginx version: nginx/1.30.7"
             composer --version
             aws --version
             node --version

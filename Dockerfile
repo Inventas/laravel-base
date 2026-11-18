@@ -39,6 +39,10 @@ RUN php -r 'exit(PHP_VERSION === "8.5.12" ? 0 : 1);' \
 
 RUN docker-php-serversideup-dep-install-alpine git
 
+# Fix the HTTP/2 memory-safety vulnerabilities in the pinned upstream image.
+RUN apk add --no-cache --upgrade nginx=1.30.7-r0 \
+ && nginx -v
+
 # Set writable caches for www-data
 ENV NPM_CONFIG_CACHE=/var/www/.npm
 RUN mkdir -p /var/www/.npm && chown -R www-data:www-data /var/www/.npm

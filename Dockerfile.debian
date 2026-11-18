@@ -24,6 +24,12 @@ RUN php -r 'exit(PHP_VERSION === "8.5.12" ? 0 : 1);' \
  && node --version \
  && npm --version
 
+# Fix the HTTP/2 memory-safety vulnerabilities in the pinned upstream image.
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends nginx=1.30.7-1~trixie \
+ && rm -rf /var/lib/apt/lists/* \
+ && nginx -v
+
 ENV NPM_CONFIG_CACHE=/var/www/.npm
 RUN mkdir -p /var/www/.npm && chown -R www-data:www-data /var/www/.npm
 
