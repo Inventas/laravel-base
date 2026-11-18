@@ -62,3 +62,15 @@ jobs:
             node --version
             npm --version
           '
+      - name: Check non-root web server startup
+        run: |
+          docker run --detach --name runtime-startup --env AUTORUN_ENABLED=false --env SSL_MODE=off laravel-base-check:local
+          trap 'docker logs runtime-startup; docker rm -f runtime-startup' EXIT
+          for attempt in $(seq 1 20); do
+            if docker exec runtime-startup curl --silent --show-error --max-time 1 --output /dev/null http://127.0.0.1:8080/; then
+              docker exec runtime-startup nginx -t
+              exit 0
+            fi
+            sleep 1
+          done
+          exit 1

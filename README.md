@@ -67,3 +67,16 @@ branch. Check for an existing publish run before starting another one. Rerunning
 an old run uses its original commit; it does not publish the current `main`
 commit. After both publish jobs pass, resolve the new image digests before
 updating consuming applications.
+
+## NGINX startup and image rollback
+
+Keep Alpine NGINX on the configured `@nginx` repository. After a package update,
+remove `/etc/nginx/nginx.conf` so Server Side Up can generate it from its template.
+Restore the NGINX file permissions before returning to `www-data`. Image validation
+must start the default non-root container and reach port 8080, as well as check the
+installed version. PHP tests alone do not prove that NGINX can start.
+
+To restore the Alpine moving tags after a failed image release, start **Publish
+Runtime Images** with `restore-alpine-ref` set to a verified immutable image
+reference. This runs only the tag restoration job. Normal publication runs when
+this input is empty.
