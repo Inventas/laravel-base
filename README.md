@@ -17,9 +17,9 @@ ghcr.io/inventas/laravel-base:latest
 
 ## Security update
 
-The PHP 8.5.12 images use serversideup v5.0.2 and contain the fixes for CVE-2026-109618 and CVE-2026-109619. Both variants retain their required extensions and utilities. Publish both architecture images before rebuilding applications that consume the shared runtime.
+The PHP 8.5.12 images use Server Side Up v5.1.4 and contain the fixes for CVE-2026-109618 and CVE-2026-109619. Both variants retain their required extensions and utilities. Publish both architecture images before rebuilding applications that consume the shared runtime.
 
-The images also install NGINX 1.30.7 from their configured package repositories. This fixes CVE-2026-123007 and CVE-2026-123633, plus the other NGINX issues fixed in that release. The build pins the package version, and image validation checks the installed binary on AMD64 and ARM64. Rebuild dependent application images and update their pinned digests to apply the fixes. See the [NGINX security advisories](https://nginx.org/en/security_advisories.html).
+NGINX 1.30.7 comes from the pinned [Server Side Up v5.1.4 image](https://github.com/serversideup/docker-php/releases/tag/v5.1.4). This fixes CVE-2026-123007 and CVE-2026-123633. The shared runtime does not replace the vendor NGINX package or configuration. Image validation checks the installed version and default non-root startup on AMD64 and ARM64. Rebuild dependent application images and update their pinned digests to apply the fixes.
 
 ## Runtime
 

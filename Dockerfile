@@ -1,6 +1,6 @@
 FROM node:24.22.0-alpine3.24@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f AS node
 
-FROM serversideup/php:8.5.12-fpm-nginx-alpine-v5.0.2@sha256:4c1d9337b8a95118168f42544e90fb9ff3762c6065dbf49da67507f4d1209482 AS base
+FROM serversideup/php:8.5.12-fpm-nginx-alpine-v5.1.4@sha256:d3f19536bee1e06f635f7fc1f561964b14e89c72db0b5f24602e81a3935232c5 AS base
 LABEL org.opencontainers.image.source="https://github.com/inventas/laravel-base"
 
 USER root
@@ -38,10 +38,6 @@ RUN php -r 'exit(PHP_VERSION === "8.5.12" ? 0 : 1);' \
  && npm --version
 
 RUN docker-php-serversideup-dep-install-alpine git
-
-# Fix the HTTP/2 memory-safety vulnerabilities in the pinned upstream image.
-RUN apk add --no-cache --upgrade nginx=1.30.7-r0 \
- && nginx -v
 
 # Set writable caches for www-data
 ENV NPM_CONFIG_CACHE=/var/www/.npm
